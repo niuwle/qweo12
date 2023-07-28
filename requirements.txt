@@ -1,0 +1,8 @@
+TA-Lib
+numpy
+python-binance
+pandas
+scikit-learn
+textblob
+newsapi-python
+binance-connector-python
