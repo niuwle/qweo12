@@ -110,34 +110,25 @@ def rebalance_portfolio():
             elif coin_balance < target_investment:
                 # Buy deficit
                 order = client.client.new_order(symbol=coin['asset'] + 'USDT', side='BUY', type='MARKET', quantity=(target_investment - coin_balance) / float(client.client.ticker_price(coin['asset'] + 'USDT')['price']))
+
 def get_top_coins(limit):
     logging.info(f'Getting top {limit} coins...')
     exchange_info = client.client.exchange_info()
     symbols = [symbol_info['symbol'] for symbol_info in exchange_info['symbols'] if symbol_info['quoteAsset'] == 'USDT']
     tickers = [client.client.ticker_24hr(symbol) for symbol in symbols]
     
-    # Filter out stablecoins
-    stablecoins = ['USDT', 'USDC', 'BUSD', 'DAI', 'TUSD', 'PAX', 'GUSD']
-    tickers = [ticker for ticker in tickers if not any(stablecoin in ticker['symbol'].replace('USDT', '') for stablecoin in stablecoins)]
-    
-    logging.info(f'Number of coins after filtering out stablecoins: {len(tickers)}')
+    # Calculate the volatility for each coin
+    for ticker in tickers:
+        ticker['volatility'] = (float(ticker['highPrice']) - float(ticker['lowPrice'])) / float(ticker['lowPrice'])
     
     # Filter out coins with low volatility
-    tickers = [ticker for ticker in tickers if float(ticker['highPrice']) - float(ticker['lowPrice']) > float(ticker['lastPrice']) * 0.01]  # Change 0.01 to your desired volatility threshold
+    tickers = [ticker for ticker in tickers if ticker['volatility'] > 0.01]  # Adjust the threshold as needed
     
-    logging.info(f'Number of coins after filtering out low volatility coins: {len(tickers)}')
-    
-    # Sort coins by a combination of volume and price change
-    coins = sorted(tickers, key=lambda x: float(x['quoteVolume']) * abs(float(x['priceChangePercent'])), reverse=True)
-    
-    logging.info(f'Number of coins after sorting: {len(coins)}')
-    
-    # Filter coins based on recent price changes
-    coins = [coin for coin in coins if float(coin['priceChangePercent']) > 0]  # Change 0 to your desired price change threshold
-    
-    logging.info(f'Number of coins after filtering based on recent price changes: {len(coins)}')
+    # Sort the coins by their volatility
+    coins = sorted(tickers, key=lambda x: x['volatility'], reverse=True)
     
     return coins[:limit]  # Return the top 'limit' coins
+
 
 def place_order(symbol, side, spending_limit, close_price):
     # Get the precision for this coin
