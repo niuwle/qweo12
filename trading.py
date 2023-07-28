@@ -5,25 +5,28 @@ import utils
 import talib
 import config
 from sklearn.model_selection import train_test_split
+from sklearn.ensemble import RandomForestRegressor
+from sklearn.metrics import mean_absolute_error
+from textblob import TextBlob
+from newsapi import NewsApiClient
+import pandas as pd
+from datetime import datetime, timedelta
 
+newsapi = config.newsapi
 
 def process_coin(symbol, ticker_prices, balances):
     logging.info(f'Processing coin: {symbol}')
     logging.info(f'Ticker prices: {ticker_prices}')
     logging.info(f'Balances: {balances}')
-    # Get the current price of the coin from ticker_prices
     current_price = ticker_prices.get(symbol, None)
     if current_price is None:
         logging.error(f'No price data for {symbol}')
         return
 
-    # Get the balance of the coin
-    coin_balance = balances.get(symbol[:-4], 0)  # symbol[:-4] to remove 'USDT' from the symbol
+    coin_balance = balances.get(symbol[:-4], 0)
 
-    # Calculate the value of the coin balance in USDT
     coin_balance_usdt = coin_balance * current_price
 
-    # Log the current price and balance of the coin
     logging.info(f'Current price of {symbol}: {current_price}')
     logging.info(f'Balance of {symbol}: {coin_balance} ({coin_balance_usdt} USDT)')
 
@@ -31,20 +34,18 @@ def process_coin(symbol, ticker_prices, balances):
     close_prices = [float(x[4]) for x in ohlcv]
     high_prices = [float(x[2]) for x in ohlcv]
     low_prices = [float(x[3]) for x in ohlcv]
-    
-    # Split data into training and testing sets to avoid overfitting
+
     close_prices_train, close_prices_test, high_prices_train, high_prices_test, low_prices_train, low_prices_test = train_test_split(close_prices, high_prices, low_prices, test_size=0.2, shuffle=False)
-                
+
     high_prices_train = np.array(high_prices_train)
     low_prices_train = np.array(low_prices_train)
     close_prices_train = np.array(close_prices_train)
 
-    # Calculate indicators using training data
     rsi = talib.RSI(close_prices_train, 14)
     macd, signal, hist = talib.MACD(close_prices_train, 12, 26)
     sma = talib.SMA(close_prices_train, 14)
     ema = talib.EMA(close_prices_train, 14)
-    atr = talib.ATR(high_prices_train, low_prices_train, close_prices_train, 14)  # Adjusted ATR calculation
+    atr = talib.ATR(high_prices_train, low_prices_train, close_prices_train, 14)
     parabolic_sar = talib.SAR(high_prices_train, low_prices_train, 0.02, 0.2)
     upper_band, middle_band, lower_band = talib.BBANDS(close_prices_train, 20, 2, 2)
     supertrend = utils.calculate_supertrend(high_prices_train, low_prices_train, close_prices_train, 14, 3)
@@ -52,47 +53,31 @@ def process_coin(symbol, ticker_prices, balances):
     fibonacci_levels = utils.calculate_fibonacci_retracement_levels(max(close_prices), min(close_prices))
     pivot, r1, s1, r2, s2 = utils.calculate_pivot_points(max(high_prices), min(low_prices), close_prices[-1])
 
-    buy_score = sum([
-        rsi[-1] < 30,
-        hist[-1] > 0,
-        sma[-1] < ema[-1],
-        close_prices[-1] < fibonacci_levels[2],
-        close_prices[-1] <= s1,
-        close_prices[-1] > supertrend[-1],
-        close_prices[-1] > parabolic_sar[-1],
-        close_prices[-1] < lower_band[-1]
-    ])
+    # Add more indicators
+    stoch = talib.STOCH(high_prices_train, low_prices_train, close_prices_train, 5, 3, 0, 3, 0)
+    cci = talib.CCI(high_prices_train, low_prices_train, close_prices_train, 14)
+    mfi = talib.MFI(high_prices_train, low_prices_train, close_prices_train, np.array(volume), 14)
 
-    sell_score = sum([
-        rsi[-1] > 70,
-        hist[-1] < 0,
-        sma[-1] > ema[-1],
-        close_prices[-1] > fibonacci_levels[0],
-        close_prices[-1] >= r1,
-        close_prices[-1] < supertrend[-1],
-        close_prices[-1] < parabolic_sar[-1],
-        close_prices[-1] > upper_band[-1]
-    ])
+    # Fundamental analysis
+    coin_info = client.client.get_coin_info(symbol[:-4])
+    market_cap = coin_info['market_cap']
+    total_supply = coin_info['total_supply']
 
-    success_rate = utils.calculate_success_rate(buy_score, sell_score)
-    
-    logging.info(f'Success Rate: {success_rate}')
-    
-    balance = client.client.account()
-    usdt_balance = next((coin for coin in balance['balances'] if coin['asset'] == 'USDT'), None)
-    if usdt_balance is not None:
-        spending_limit = float(usdt_balance['free']) * config.investment_percentage  # Update the spending limit based on the current balance
-        logging.info(f'Current balance: {usdt_balance["free"]}')
+    # Market sentiment
+    news = newsapi.get_everything(q=symbol[:-4], from_param=datetime.now() - timedelta(days=1), to=datetime.now(), language='en', sort_by='relevancy')
+    sentiment = TextBlob(news['articles'][0]['description']).sentiment.polarity
 
-    if success_rate is not None and usdt_balance is not None and usdt_balance['free'] is not None and spending_limit is not None:
-        if success_rate > 0.6 and float(usdt_balance['free']) > spending_limit:
-            place_order(symbol, 'BUY', spending_limit, close_prices[-1])
+    # Machine learning model
+    model = RandomForestRegressor(n_estimators=100, random_state=42)
+    model.fit(np.array([rsi, macd, signal, hist, sma, ema, atr, parabolic_sar, upper_band, middle_band, lower_band, supertrend, stoch, cci, mfi, market_cap, total_supply, sentiment]).T, close_prices_train)
+    prediction = model.predict(np.array([rsi[-1], macd[-1], signal[-1], hist[-1], sma[-1], ema[-1], atr[-1], parabolic_sar[-1], upper_band[-1], middle_band[-1], lower_band[-1], supertrend[-1], stoch[-1], cci[-1], mfi[-1], market_cap, total_supply, sentiment]).reshape(1, -1))
 
-    if success_rate is not None and success_rate < 0.4:
-        coin_balance = next((coin for coin in balance['balances'] if coin['asset'] == symbol.split('/')[0]), None)
-        if coin_balance is not None and coin_balance['free'] is not None and close_prices[-1] is not None and spending_limit is not None:
-            if float(coin_balance['free']) * close_prices[-1] > spending_limit:
-                place_order(symbol, 'SELL', float(coin_balance['free']) * close_prices[-1], close_prices[-1])
+    # Buy if the predicted price is higher than the current price
+    if prediction > current_price:
+        place_order(symbol, 'BUY', spending_limit, close_prices[-1])
+    # Sell if the predicted price is lower than the current price
+    elif prediction < current_price:
+        place_order(symbol, 'SELL', spending_limit, close_prices[-1])
 
 
 def rebalance_portfolio():
@@ -110,22 +95,21 @@ def rebalance_portfolio():
             elif coin_balance < target_investment:
                 # Buy deficit
                 order = client.client.new_order(symbol=coin['asset'] + 'USDT', side='BUY', type='MARKET', quantity=(target_investment - coin_balance) / float(client.client.ticker_price(coin['asset'] + 'USDT')['price']))
-
 def get_top_coins(limit):
     logging.info(f'Getting top {limit} coins...')
     exchange_info = client.client.exchange_info()
     symbols = [symbol_info['symbol'] for symbol_info in exchange_info['symbols'] if symbol_info['quoteAsset'] == 'USDT']
     tickers = [client.client.ticker_24hr(symbol) for symbol in symbols]
     
-    # Calculate the volatility for each coin
+    # Calculate the price increase for each coin
     for ticker in tickers:
-        ticker['volatility'] = (float(ticker['highPrice']) - float(ticker['lowPrice'])) / float(ticker['lowPrice'])
+        ticker['price_increase'] = (float(ticker['lastPrice']) - float(ticker['openPrice'])) / float(ticker['openPrice'])
     
-    # Filter out coins with low volatility
-    tickers = [ticker for ticker in tickers if ticker['volatility'] > 0.01]  # Adjust the threshold as needed
+    # Filter out coins with low price increase
+    tickers = [ticker for ticker in tickers if ticker['price_increase'] > 0.01]  # Adjust the threshold as needed
     
-    # Sort the coins by their volatility
-    coins = sorted(tickers, key=lambda x: x['volatility'], reverse=True)
+    # Sort the coins by their price increase
+    coins = sorted(tickers, key=lambda x: x['price_increase'], reverse=True)
     
     return coins[:limit]  # Return the top 'limit' coins
 

@@ -995,3 +995,105 @@
 2023-07-28 17:21:02,268 Success Rate: 0.6666666666666666
 2023-07-28 17:21:02,548 Current balance: 97.25646551
 2023-07-28 17:21:03,339 Error processing coin {'symbol': 'TRXUSDT', 'priceChange': '0.00173000', 'priceChangePercent': '2.102', 'weightedAvgPrice': '0.08335136', 'prevClosePrice': '0.08234000', 'lastPrice': '0.08402000', 'lastQty': '8563.70000000', 'bidPrice': '0.08402000', 'bidQty': '838.90000000', 'askPrice': '0.08403000', 'askQty': '2025.80000000', 'openPrice': '0.08229000', 'highPrice': '0.08429000', 'lowPrice': '0.08213000', 'volume': '15407379.10000000', 'quoteVolume': '1284226.01969700', 'openTime': 1690471231048, 'closeTime': 1690557631048, 'firstId': 85508, 'lastId': 88112, 'count': 2605, 'volatility': 0.02629976865944246}: '<' not supported between instances of 'float' and 'NoneType', Ticker Prices: {'BNBUSDT': 242.4, 'BTCUSDT': 29504.87, 'ETHUSDT': 1878.86, 'LTCUSDT': 91.89, 'TRXUSDT': 0.08402, 'XRPUSDT': 0.7148}, Balances: {'BNB': 1008.16, 'BTC': 1.080905, 'BUSD': 10000.0, 'ETH': 102.986, 'LTC': 500.0, 'TRX': 500000.0, 'USDT': 97.25646551, 'XRP': 50000.0}
+2023-07-28 17:23:56,498 Coin: BNB, Free: 1008.16000000, Locked: 0.00000000
+2023-07-28 17:23:56,498 Coin: BTC, Free: 1.08090500, Locked: 0.00000000
+2023-07-28 17:23:56,498 Coin: BUSD, Free: 10000.00000000, Locked: 0.00000000
+2023-07-28 17:23:56,499 Coin: ETH, Free: 102.98600000, Locked: 0.00000000
+2023-07-28 17:23:56,499 Coin: LTC, Free: 500.00000000, Locked: 0.00000000
+2023-07-28 17:23:56,499 Coin: TRX, Free: 500000.00000000, Locked: 0.00000000
+2023-07-28 17:23:56,499 Coin: USDT, Free: 97.25646551, Locked: 0.00000000
+2023-07-28 17:23:56,499 Coin: XRP, Free: 50000.00000000, Locked: 0.00000000
+2023-07-28 17:23:56,499 Getting top 10 coins...
+2023-07-28 17:24:01,654 Top coins: [{'symbol': 'TRXUSDT', 'priceChange': '0.00177000', 'priceChangePercent': '2.148', 'weightedAvgPrice': '0.08336224', 'prevClosePrice': '0.08238000', 'lastPrice': '0.08416000', 'lastQty': '9505.80000000', 'bidPrice': '0.08413000', 'bidQty': '7013.00000000', 'askPrice': '0.08414000', 'askQty': '7131.00000000', 'openPrice': '0.08239000', 'highPrice': '0.08429000', 'lowPrice': '0.08213000', 'volume': '15459584.10000000', 'quoteVolume': '1288745.51026000', 'openTime': 1690471438267, 'closeTime': 1690557838267, 'firstId': 85519, 'lastId': 88136, 'count': 2618, 'price_increase': 0.021483189707488696}, {'symbol': 'LTCUSDT', 'priceChange': '1.31000000', 'priceChangePercent': '1.446', 'weightedAvgPrice': '90.77317083', 'prevClosePrice': '90.62000000', 'lastPrice': '91.92000000', 'lastQty': '6.52700000', 'bidPrice': '91.87000000', 'bidQty': '6.53097000', 'askPrice': '91.88000000', 'askQty': '7.61864000', 'openPrice': '90.61000000', 'highPrice': '167.00000000', 'lowPrice': '32.10000000', 'volume': '39306.71448000', 'quoteVolume': '3567995.10806750', 'openTime': 1690471439045, 'closeTime': 1690557839045, 'firstId': 359776, 'lastId': 367257, 'count': 7482, 'price_increase': 0.014457565390133565}]
+2023-07-28 17:24:06,739 Processing coin: TRXUSDT
+2023-07-28 17:24:06,739 Ticker prices: {'BNBUSDT': 242.6, 'BTCUSDT': 29492.89, 'ETHUSDT': 1878.88, 'LTCUSDT': 91.92, 'TRXUSDT': 0.08416, 'XRPUSDT': 0.7155}
+2023-07-28 17:24:06,739 Balances: {'BNB': 1008.16, 'BTC': 1.080905, 'BUSD': 10000.0, 'ETH': 102.986, 'LTC': 500.0, 'TRX': 500000.0, 'USDT': 97.25646551, 'XRP': 50000.0}
+2023-07-28 17:24:06,739 Current price of TRXUSDT: 0.08416
+2023-07-28 17:24:06,739 Balance of TRXUSDT: 500000.0 (42080.0 USDT)
+2023-07-28 17:24:07,099 Success Rate: 0.6666666666666666
+2023-07-28 17:24:07,455 Current balance: 97.25646551
+2023-07-28 17:24:08,163 Error processing coin {'symbol': 'TRXUSDT', 'priceChange': '0.00177000', 'priceChangePercent': '2.148', 'weightedAvgPrice': '0.08336224', 'prevClosePrice': '0.08238000', 'lastPrice': '0.08416000', 'lastQty': '9505.80000000', 'bidPrice': '0.08413000', 'bidQty': '7013.00000000', 'askPrice': '0.08414000', 'askQty': '7131.00000000', 'openPrice': '0.08239000', 'highPrice': '0.08429000', 'lowPrice': '0.08213000', 'volume': '15459584.10000000', 'quoteVolume': '1288745.51026000', 'openTime': 1690471438267, 'closeTime': 1690557838267, 'firstId': 85519, 'lastId': 88136, 'count': 2618, 'price_increase': 0.021483189707488696}: '<' not supported between instances of 'float' and 'NoneType', Ticker Prices: {'BNBUSDT': 242.6, 'BTCUSDT': 29492.89, 'ETHUSDT': 1878.88, 'LTCUSDT': 91.92, 'TRXUSDT': 0.08416, 'XRPUSDT': 0.7155}, Balances: {'BNB': 1008.16, 'BTC': 1.080905, 'BUSD': 10000.0, 'ETH': 102.986, 'LTC': 500.0, 'TRX': 500000.0, 'USDT': 97.25646551, 'XRP': 50000.0}
+2023-07-28 17:24:08,164 Processing coin: LTCUSDT
+2023-07-28 17:24:08,164 Ticker prices: {'BNBUSDT': 242.6, 'BTCUSDT': 29492.89, 'ETHUSDT': 1878.88, 'LTCUSDT': 91.92, 'TRXUSDT': 0.08416, 'XRPUSDT': 0.7155}
+2023-07-28 17:24:08,164 Balances: {'BNB': 1008.16, 'BTC': 1.080905, 'BUSD': 10000.0, 'ETH': 102.986, 'LTC': 500.0, 'TRX': 500000.0, 'USDT': 97.25646551, 'XRP': 50000.0}
+2023-07-28 17:24:08,164 Current price of LTCUSDT: 91.92
+2023-07-28 17:24:08,164 Balance of LTCUSDT: 500.0 (45960.0 USDT)
+2023-07-28 17:24:08,488 Success Rate: 0.5
+2023-07-28 17:24:08,819 Current balance: 97.25646551
+2023-07-28 17:25:14,156 Processing coin: TRXUSDT
+2023-07-28 17:25:14,156 Ticker prices: {'BNBUSDT': 242.6, 'BTCUSDT': 29481.27, 'ETHUSDT': 1879.37, 'LTCUSDT': 91.84, 'TRXUSDT': 0.0841, 'XRPUSDT': 0.7149}
+2023-07-28 17:25:14,156 Balances: {'BNB': 1008.16, 'BTC': 1.080905, 'BUSD': 10000.0, 'ETH': 102.986, 'LTC': 500.0, 'TRX': 500000.0, 'USDT': 97.25646551, 'XRP': 50000.0}
+2023-07-28 17:25:14,156 Current price of TRXUSDT: 0.0841
+2023-07-28 17:25:14,156 Balance of TRXUSDT: 500000.0 (42050.0 USDT)
+2023-07-28 17:25:14,928 Success Rate: 0.6666666666666666
+2023-07-28 17:25:15,667 Current balance: 97.25646551
+2023-07-28 17:25:16,719 Error processing coin {'symbol': 'TRXUSDT', 'priceChange': '0.00177000', 'priceChangePercent': '2.148', 'weightedAvgPrice': '0.08336224', 'prevClosePrice': '0.08238000', 'lastPrice': '0.08416000', 'lastQty': '9505.80000000', 'bidPrice': '0.08413000', 'bidQty': '7013.00000000', 'askPrice': '0.08414000', 'askQty': '7131.00000000', 'openPrice': '0.08239000', 'highPrice': '0.08429000', 'lowPrice': '0.08213000', 'volume': '15459584.10000000', 'quoteVolume': '1288745.51026000', 'openTime': 1690471438267, 'closeTime': 1690557838267, 'firstId': 85519, 'lastId': 88136, 'count': 2618, 'price_increase': 0.021483189707488696}: '<' not supported between instances of 'float' and 'NoneType', Ticker Prices: {'BNBUSDT': 242.6, 'BTCUSDT': 29481.27, 'ETHUSDT': 1879.37, 'LTCUSDT': 91.84, 'TRXUSDT': 0.0841, 'XRPUSDT': 0.7149}, Balances: {'BNB': 1008.16, 'BTC': 1.080905, 'BUSD': 10000.0, 'ETH': 102.986, 'LTC': 500.0, 'TRX': 500000.0, 'USDT': 97.25646551, 'XRP': 50000.0}
+2023-07-28 17:25:16,719 Processing coin: LTCUSDT
+2023-07-28 17:25:16,719 Ticker prices: {'BNBUSDT': 242.6, 'BTCUSDT': 29481.27, 'ETHUSDT': 1879.37, 'LTCUSDT': 91.84, 'TRXUSDT': 0.0841, 'XRPUSDT': 0.7149}
+2023-07-28 17:25:16,719 Balances: {'BNB': 1008.16, 'BTC': 1.080905, 'BUSD': 10000.0, 'ETH': 102.986, 'LTC': 500.0, 'TRX': 500000.0, 'USDT': 97.25646551, 'XRP': 50000.0}
+2023-07-28 17:25:16,720 Current price of LTCUSDT: 91.84
+2023-07-28 17:25:16,720 Balance of LTCUSDT: 500.0 (45920.0 USDT)
+2023-07-28 17:25:17,307 Success Rate: 0.5
+2023-07-28 17:25:18,063 Current balance: 97.25646551
+2023-07-28 17:26:22,964 Processing coin: TRXUSDT
+2023-07-28 17:26:22,964 Ticker prices: {'BNBUSDT': 242.6, 'BTCUSDT': 29508.81, 'ETHUSDT': 1880.35, 'LTCUSDT': 91.91, 'TRXUSDT': 0.0841, 'XRPUSDT': 0.7152}
+2023-07-28 17:26:22,964 Balances: {'BNB': 1008.16, 'BTC': 1.080905, 'BUSD': 10000.0, 'ETH': 102.986, 'LTC': 500.0, 'TRX': 500000.0, 'USDT': 97.25646551, 'XRP': 50000.0}
+2023-07-28 17:26:22,964 Current price of TRXUSDT: 0.0841
+2023-07-28 17:26:22,964 Balance of TRXUSDT: 500000.0 (42050.0 USDT)
+2023-07-28 17:26:23,756 Success Rate: 0.6666666666666666
+2023-07-28 17:26:24,038 Current balance: 97.25646551
+2023-07-28 17:26:25,081 Error processing coin {'symbol': 'TRXUSDT', 'priceChange': '0.00177000', 'priceChangePercent': '2.148', 'weightedAvgPrice': '0.08336224', 'prevClosePrice': '0.08238000', 'lastPrice': '0.08416000', 'lastQty': '9505.80000000', 'bidPrice': '0.08413000', 'bidQty': '7013.00000000', 'askPrice': '0.08414000', 'askQty': '7131.00000000', 'openPrice': '0.08239000', 'highPrice': '0.08429000', 'lowPrice': '0.08213000', 'volume': '15459584.10000000', 'quoteVolume': '1288745.51026000', 'openTime': 1690471438267, 'closeTime': 1690557838267, 'firstId': 85519, 'lastId': 88136, 'count': 2618, 'price_increase': 0.021483189707488696}: '<' not supported between instances of 'float' and 'NoneType', Ticker Prices: {'BNBUSDT': 242.6, 'BTCUSDT': 29508.81, 'ETHUSDT': 1880.35, 'LTCUSDT': 91.91, 'TRXUSDT': 0.0841, 'XRPUSDT': 0.7152}, Balances: {'BNB': 1008.16, 'BTC': 1.080905, 'BUSD': 10000.0, 'ETH': 102.986, 'LTC': 500.0, 'TRX': 500000.0, 'USDT': 97.25646551, 'XRP': 50000.0}
+2023-07-28 17:26:25,082 Processing coin: LTCUSDT
+2023-07-28 17:26:25,082 Ticker prices: {'BNBUSDT': 242.6, 'BTCUSDT': 29508.81, 'ETHUSDT': 1880.35, 'LTCUSDT': 91.91, 'TRXUSDT': 0.0841, 'XRPUSDT': 0.7152}
+2023-07-28 17:26:25,082 Balances: {'BNB': 1008.16, 'BTC': 1.080905, 'BUSD': 10000.0, 'ETH': 102.986, 'LTC': 500.0, 'TRX': 500000.0, 'USDT': 97.25646551, 'XRP': 50000.0}
+2023-07-28 17:26:25,082 Current price of LTCUSDT: 91.91
+2023-07-28 17:26:25,082 Balance of LTCUSDT: 500.0 (45955.0 USDT)
+2023-07-28 17:26:25,603 Success Rate: 0.5
+2023-07-28 17:26:26,351 Current balance: 97.25646551
+2023-07-28 17:27:31,942 Processing coin: TRXUSDT
+2023-07-28 17:27:31,942 Ticker prices: {'BNBUSDT': 242.4, 'BTCUSDT': 29486.01, 'ETHUSDT': 1879.66, 'LTCUSDT': 91.9, 'TRXUSDT': 0.0841, 'XRPUSDT': 0.715}
+2023-07-28 17:27:31,942 Balances: {'BNB': 1008.16, 'BTC': 1.080905, 'BUSD': 10000.0, 'ETH': 102.986, 'LTC': 500.0, 'TRX': 500000.0, 'USDT': 97.25646551, 'XRP': 50000.0}
+2023-07-28 17:27:31,942 Current price of TRXUSDT: 0.0841
+2023-07-28 17:27:31,942 Balance of TRXUSDT: 500000.0 (42050.0 USDT)
+2023-07-28 17:27:32,208 Success Rate: 0.6666666666666666
+2023-07-28 17:27:32,936 Current balance: 97.25646551
+2023-07-28 17:27:34,416 Error processing coin {'symbol': 'TRXUSDT', 'priceChange': '0.00177000', 'priceChangePercent': '2.148', 'weightedAvgPrice': '0.08336224', 'prevClosePrice': '0.08238000', 'lastPrice': '0.08416000', 'lastQty': '9505.80000000', 'bidPrice': '0.08413000', 'bidQty': '7013.00000000', 'askPrice': '0.08414000', 'askQty': '7131.00000000', 'openPrice': '0.08239000', 'highPrice': '0.08429000', 'lowPrice': '0.08213000', 'volume': '15459584.10000000', 'quoteVolume': '1288745.51026000', 'openTime': 1690471438267, 'closeTime': 1690557838267, 'firstId': 85519, 'lastId': 88136, 'count': 2618, 'price_increase': 0.021483189707488696}: '<' not supported between instances of 'float' and 'NoneType', Ticker Prices: {'BNBUSDT': 242.4, 'BTCUSDT': 29486.01, 'ETHUSDT': 1879.66, 'LTCUSDT': 91.9, 'TRXUSDT': 0.0841, 'XRPUSDT': 0.715}, Balances: {'BNB': 1008.16, 'BTC': 1.080905, 'BUSD': 10000.0, 'ETH': 102.986, 'LTC': 500.0, 'TRX': 500000.0, 'USDT': 97.25646551, 'XRP': 50000.0}
+2023-07-28 17:27:34,417 Processing coin: LTCUSDT
+2023-07-28 17:27:34,417 Ticker prices: {'BNBUSDT': 242.4, 'BTCUSDT': 29486.01, 'ETHUSDT': 1879.66, 'LTCUSDT': 91.9, 'TRXUSDT': 0.0841, 'XRPUSDT': 0.715}
+2023-07-28 17:27:34,417 Balances: {'BNB': 1008.16, 'BTC': 1.080905, 'BUSD': 10000.0, 'ETH': 102.986, 'LTC': 500.0, 'TRX': 500000.0, 'USDT': 97.25646551, 'XRP': 50000.0}
+2023-07-28 17:27:34,417 Current price of LTCUSDT: 91.9
+2023-07-28 17:27:34,417 Balance of LTCUSDT: 500.0 (45950.0 USDT)
+2023-07-28 17:27:34,936 Success Rate: 0.5
+2023-07-28 17:27:35,233 Current balance: 97.25646551
+2023-07-28 17:28:40,884 Processing coin: TRXUSDT
+2023-07-28 17:28:40,884 Ticker prices: {'BNBUSDT': 242.3, 'BTCUSDT': 29484.5, 'ETHUSDT': 1878.98, 'LTCUSDT': 91.87, 'TRXUSDT': 0.08405, 'XRPUSDT': 0.7147}
+2023-07-28 17:28:40,884 Balances: {'BNB': 1008.16, 'BTC': 1.080905, 'BUSD': 10000.0, 'ETH': 102.986, 'LTC': 500.0, 'TRX': 500000.0, 'USDT': 97.25646551, 'XRP': 50000.0}
+2023-07-28 17:28:40,884 Current price of TRXUSDT: 0.08405
+2023-07-28 17:28:40,885 Balance of TRXUSDT: 500000.0 (42025.0 USDT)
+2023-07-28 17:28:41,628 Success Rate: 0.6666666666666666
+2023-07-28 17:28:42,011 Current balance: 97.25646551
+2023-07-28 17:28:43,649 Error processing coin {'symbol': 'TRXUSDT', 'priceChange': '0.00177000', 'priceChangePercent': '2.148', 'weightedAvgPrice': '0.08336224', 'prevClosePrice': '0.08238000', 'lastPrice': '0.08416000', 'lastQty': '9505.80000000', 'bidPrice': '0.08413000', 'bidQty': '7013.00000000', 'askPrice': '0.08414000', 'askQty': '7131.00000000', 'openPrice': '0.08239000', 'highPrice': '0.08429000', 'lowPrice': '0.08213000', 'volume': '15459584.10000000', 'quoteVolume': '1288745.51026000', 'openTime': 1690471438267, 'closeTime': 1690557838267, 'firstId': 85519, 'lastId': 88136, 'count': 2618, 'price_increase': 0.021483189707488696}: '<' not supported between instances of 'float' and 'NoneType', Ticker Prices: {'BNBUSDT': 242.3, 'BTCUSDT': 29484.5, 'ETHUSDT': 1878.98, 'LTCUSDT': 91.87, 'TRXUSDT': 0.08405, 'XRPUSDT': 0.7147}, Balances: {'BNB': 1008.16, 'BTC': 1.080905, 'BUSD': 10000.0, 'ETH': 102.986, 'LTC': 500.0, 'TRX': 500000.0, 'USDT': 97.25646551, 'XRP': 50000.0}
+2023-07-28 17:28:43,649 Processing coin: LTCUSDT
+2023-07-28 17:28:43,649 Ticker prices: {'BNBUSDT': 242.3, 'BTCUSDT': 29484.5, 'ETHUSDT': 1878.98, 'LTCUSDT': 91.87, 'TRXUSDT': 0.08405, 'XRPUSDT': 0.7147}
+2023-07-28 17:28:43,649 Balances: {'BNB': 1008.16, 'BTC': 1.080905, 'BUSD': 10000.0, 'ETH': 102.986, 'LTC': 500.0, 'TRX': 500000.0, 'USDT': 97.25646551, 'XRP': 50000.0}
+2023-07-28 17:28:43,650 Current price of LTCUSDT: 91.87
+2023-07-28 17:28:43,650 Balance of LTCUSDT: 500.0 (45935.0 USDT)
+2023-07-28 17:28:44,187 Success Rate: 0.6666666666666666
+2023-07-28 17:28:44,467 Current balance: 97.25646551
+2023-07-28 17:28:45,035 Error processing coin {'symbol': 'LTCUSDT', 'priceChange': '1.31000000', 'priceChangePercent': '1.446', 'weightedAvgPrice': '90.77317083', 'prevClosePrice': '90.62000000', 'lastPrice': '91.92000000', 'lastQty': '6.52700000', 'bidPrice': '91.87000000', 'bidQty': '6.53097000', 'askPrice': '91.88000000', 'askQty': '7.61864000', 'openPrice': '90.61000000', 'highPrice': '167.00000000', 'lowPrice': '32.10000000', 'volume': '39306.71448000', 'quoteVolume': '3567995.10806750', 'openTime': 1690471439045, 'closeTime': 1690557839045, 'firstId': 359776, 'lastId': 367257, 'count': 7482, 'price_increase': 0.014457565390133565}: '<' not supported between instances of 'float' and 'NoneType', Ticker Prices: {'BNBUSDT': 242.3, 'BTCUSDT': 29484.5, 'ETHUSDT': 1878.98, 'LTCUSDT': 91.87, 'TRXUSDT': 0.08405, 'XRPUSDT': 0.7147}, Balances: {'BNB': 1008.16, 'BTC': 1.080905, 'BUSD': 10000.0, 'ETH': 102.986, 'LTC': 500.0, 'TRX': 500000.0, 'USDT': 97.25646551, 'XRP': 50000.0}
+2023-07-28 17:29:50,210 Processing coin: TRXUSDT
+2023-07-28 17:29:50,210 Ticker prices: {'BNBUSDT': 242.3, 'BTCUSDT': 29489.52, 'ETHUSDT': 1879.32, 'LTCUSDT': 91.9, 'TRXUSDT': 0.08405, 'XRPUSDT': 0.7148}
+2023-07-28 17:29:50,210 Balances: {'BNB': 1008.16, 'BTC': 1.080905, 'BUSD': 10000.0, 'ETH': 102.986, 'LTC': 500.0, 'TRX': 500000.0, 'USDT': 97.25646551, 'XRP': 50000.0}
+2023-07-28 17:29:50,210 Current price of TRXUSDT: 0.08405
+2023-07-28 17:29:50,210 Balance of TRXUSDT: 500000.0 (42025.0 USDT)
+2023-07-28 17:29:50,482 Success Rate: 0.6666666666666666
+2023-07-28 17:29:51,337 Current balance: 97.25646551
+2023-07-28 17:29:52,462 Error processing coin {'symbol': 'TRXUSDT', 'priceChange': '0.00177000', 'priceChangePercent': '2.148', 'weightedAvgPrice': '0.08336224', 'prevClosePrice': '0.08238000', 'lastPrice': '0.08416000', 'lastQty': '9505.80000000', 'bidPrice': '0.08413000', 'bidQty': '7013.00000000', 'askPrice': '0.08414000', 'askQty': '7131.00000000', 'openPrice': '0.08239000', 'highPrice': '0.08429000', 'lowPrice': '0.08213000', 'volume': '15459584.10000000', 'quoteVolume': '1288745.51026000', 'openTime': 1690471438267, 'closeTime': 1690557838267, 'firstId': 85519, 'lastId': 88136, 'count': 2618, 'price_increase': 0.021483189707488696}: '<' not supported between instances of 'float' and 'NoneType', Ticker Prices: {'BNBUSDT': 242.3, 'BTCUSDT': 29489.52, 'ETHUSDT': 1879.32, 'LTCUSDT': 91.9, 'TRXUSDT': 0.08405, 'XRPUSDT': 0.7148}, Balances: {'BNB': 1008.16, 'BTC': 1.080905, 'BUSD': 10000.0, 'ETH': 102.986, 'LTC': 500.0, 'TRX': 500000.0, 'USDT': 97.25646551, 'XRP': 50000.0}
+2023-07-28 17:29:52,462 Processing coin: LTCUSDT
+2023-07-28 17:29:52,462 Ticker prices: {'BNBUSDT': 242.3, 'BTCUSDT': 29489.52, 'ETHUSDT': 1879.32, 'LTCUSDT': 91.9, 'TRXUSDT': 0.08405, 'XRPUSDT': 0.7148}
+2023-07-28 17:29:52,462 Balances: {'BNB': 1008.16, 'BTC': 1.080905, 'BUSD': 10000.0, 'ETH': 102.986, 'LTC': 500.0, 'TRX': 500000.0, 'USDT': 97.25646551, 'XRP': 50000.0}
+2023-07-28 17:29:52,462 Current price of LTCUSDT: 91.9
+2023-07-28 17:29:52,462 Balance of LTCUSDT: 500.0 (45950.0 USDT)
+2023-07-28 17:29:52,970 Success Rate: 0.6666666666666666
+2023-07-28 17:29:53,282 Current balance: 97.25646551
+2023-07-28 17:29:54,410 Error processing coin {'symbol': 'LTCUSDT', 'priceChange': '1.31000000', 'priceChangePercent': '1.446', 'weightedAvgPrice': '90.77317083', 'prevClosePrice': '90.62000000', 'lastPrice': '91.92000000', 'lastQty': '6.52700000', 'bidPrice': '91.87000000', 'bidQty': '6.53097000', 'askPrice': '91.88000000', 'askQty': '7.61864000', 'openPrice': '90.61000000', 'highPrice': '167.00000000', 'lowPrice': '32.10000000', 'volume': '39306.71448000', 'quoteVolume': '3567995.10806750', 'openTime': 1690471439045, 'closeTime': 1690557839045, 'firstId': 359776, 'lastId': 367257, 'count': 7482, 'price_increase': 0.014457565390133565}: '<' not supported between instances of 'float' and 'NoneType', Ticker Prices: {'BNBUSDT': 242.3, 'BTCUSDT': 29489.52, 'ETHUSDT': 1879.32, 'LTCUSDT': 91.9, 'TRXUSDT': 0.08405, 'XRPUSDT': 0.7148}, Balances: {'BNB': 1008.16, 'BTC': 1.080905, 'BUSD': 10000.0, 'ETH': 102.986, 'LTC': 500.0, 'TRX': 500000.0, 'USDT': 97.25646551, 'XRP': 50000.0}
