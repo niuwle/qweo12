@@ -7,7 +7,8 @@ from sklearn.model_selection import train_test_split
 
 def process_coin(symbol, ticker_prices, balances):
     logging.info(f'Processing coin: {symbol}')
-    
+    logging.info(f'Ticker prices: {ticker_prices}')
+    logging.info(f'Balances: {balances}')
     # Get the current price of the coin from ticker_prices
     current_price = ticker_prices.get(symbol, None)
     if current_price is None:
@@ -105,14 +106,14 @@ def rebalance_portfolio():
             elif coin_balance < target_investment:
                 # Buy deficit
                 order = client.client.new_order(symbol=coin['asset'] + 'USDT', side='BUY', type='MARKET', quantity=(target_investment - coin_balance) / float(client.client.ticker_price(coin['asset'] + 'USDT')['price']))
-
 def get_top_coins(limit):
     logging.info(f'Getting top {limit} coins...')
     exchange_info = client.client.exchange_info()
     symbols = [symbol_info['symbol'] for symbol_info in exchange_info['symbols'] if symbol_info['quoteAsset'] == 'USDT']
     tickers = [client.client.ticker_24hr(symbol) for symbol in symbols]
     coins = sorted(tickers, key=lambda x: float(x['quoteVolume']), reverse=True)
-    return
+    return coins[:limit]  # Return the top 'limit' coins
+
 
 def place_order(symbol, side, spending_limit, close_price):
     # Get the precision for this coin

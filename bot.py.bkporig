@@ -1,0 +1,245 @@
+import numpy as np
+import talib
+import logging
+import time
+from sklearn.model_selection import train_test_split
+from binance.spot import Spot as Client
+import math
+
+# Set up logging
+logging.basicConfig(level=logging.INFO, format='%(asctime)s %(message)s', handlers=[logging.FileHandler('bot.log'), logging.StreamHandler()])
+
+api_key = 'MCZsl4KLqluPHodGQzSin0j3u8rrvAOXnDm8EkpaMPppQbYz0VZxZc08BDfHmlot'
+api_secret = 'JWqr3BMATJebbakC3WQjNsKhLHPItpMPPsmc81TU41EmDlI3o6YxmppD7FEOq3oa'
+investment_percentage = 0.1  # Invest 10% of total portfolio in each coin
+
+# Initialize the Binance client
+client = Client(api_key=api_key, api_secret=api_secret, base_url='https://testnet.binance.vision')
+
+
+def get_min_notional(symbol):
+    exchange_info = client.exchange_info()
+    for s in exchange_info['symbols']:
+        if s['symbol'] == symbol:
+            for f in s['filters']:
+                if f['filterType'] == 'MIN_NOTIONAL':
+                    return float(f['minNotional'])
+    return None
+
+def print_wallet_balances():
+    # Get account information
+    account_info = client.account()
+
+    # Get balances
+    balances = account_info['balances']
+
+    # Print each coin and its balance
+    for coin in balances:
+        logging.info(f"Coin: {coin['asset']}, Free: {coin['free']}, Locked: {coin['locked']}")
+
+def trade_bot():
+    # Call the function to print the balances
+    print_wallet_balances()
+    top_coins = get_top_coins(20)
+    logging.info(f'Top coins: {top_coins}')
+
+    while True:
+        try:
+            # Rebalance portfolio every hour
+            if time.time() % 3600 < 1:
+                rebalance_portfolio()
+                top_coins = get_top_coins(20)
+                logging.info(f'Top coins: {top_coins}')
+                balance = client.account()
+                total_balance = sum([float(coin['free']) * float(client.ticker_price(coin['asset'] + 'USDT')['price']) for coin in balance['balances'] if coin['asset'] != 'USDT'])
+                logging.info(f'Hourly update: Total balance is {total_balance}')
+                # Call the function to print the balances
+                print_wallet_balances()
+            
+
+            for symbol in top_coins:
+                logging.info(f'Processing coin: {symbol}')
+                ohlcv = client.klines(symbol, '1m')
+                close_prices = [float(x[4]) for x in ohlcv]
+                high_prices = [float(x[2]) for x in ohlcv]
+                low_prices = [float(x[3]) for x in ohlcv]
+                
+                # Split data into training and testing sets to avoid overfitting
+                close_prices_train, close_prices_test, high_prices_train, high_prices_test, low_prices_train, low_prices_test = train_test_split(close_prices, high_prices, low_prices, test_size=0.2, shuffle=False)
+                            
+                high_prices_train = np.array(high_prices_train)
+                low_prices_train = np.array(low_prices_train)
+                close_prices_train = np.array(close_prices_train)
+
+                # Calculate indicators using training data
+                rsi = talib.RSI(close_prices_train, 14)
+                macd, signal, hist = talib.MACD(close_prices_train, 12, 26)
+                sma = talib.SMA(close_prices_train, 14)
+                ema = talib.EMA(close_prices_train, 14)
+                atr = talib.ATR(high_prices_train, low_prices_train, close_prices_train, 14)  # Adjusted ATR calculation
+                parabolic_sar = talib.SAR(high_prices_train, low_prices_train, 0.02, 0.2)
+                upper_band, middle_band, lower_band = talib.BBANDS(close_prices_train, 20, 2, 2)
+                supertrend = calculate_supertrend(high_prices_train, low_prices_train, close_prices_train, 14, 3)
+
+                fibonacci_levels = calculate_fibonacci_retracement_levels(max(close_prices), min(close_prices))
+                pivot, r1, s1, r2, s2 = calculate_pivot_points(max(high_prices), min(low_prices), close_prices[-1])
+
+                buy_score = sum([
+                    rsi[-1] < 30,
+                    hist[-1] > 0,
+                    sma[-1] < ema[-1],
+                    close_prices[-1] < fibonacci_levels[2],
+                    close_prices[-1] <= s1,
+                    close_prices[-1] > supertrend[-1],
+                    close_prices[-1] > parabolic_sar[-1],
+                    close_prices[-1] < lower_band[-1]
+                ])
+
+                sell_score = sum([
+                    rsi[-1] > 70,
+                    hist[-1] < 0,
+                    sma[-1] > ema[-1],
+                    close_prices[-1] > fibonacci_levels[0],
+                    close_prices[-1] >= r1,
+                    close_prices[-1] < supertrend[-1],
+                    close_prices[-1] < parabolic_sar[-1],
+                    close_prices[-1] > upper_band[-1]
+                ])
+
+                success_rate = calculate_success_rate(buy_score, sell_score)
+                
+                logging.info(f'Success Rate: {success_rate}')
+                
+                balance = client.account()
+                usdt_balance = next((coin for coin in balance['balances'] if coin['asset'] == 'USDT'), None)
+                if usdt_balance is not None:
+                    spending_limit = float(usdt_balance['free']) * investment_percentage  # Update the spending limit based on the current balance
+                    logging.info(f'Current balance: {usdt_balance["free"]}')
+
+                if success_rate > 0.6 and usdt_balance is not None and float(usdt_balance['free']) > spending_limit:
+                    place_order(symbol, 'BUY', spending_limit, close_prices[-1])
+
+                elif success_rate < 0.4:
+                    coin_balance = next((coin for coin in balance['balances'] if coin['asset'] == symbol.split('/')[0]), None)
+                    if coin_balance is not None and float(coin_balance['free']) * close_prices[-1] > spending_limit:
+                        place_order(symbol, 'SELL', float(coin_balance['free']) * close_prices[-1], close_prices[-1])
+                
+        except Exception as e:
+            logging.error(f'Error: {e}')
+
+def rebalance_portfolio():
+    logging.info(f'Rebalancing portfolio...')
+    balance = client.account()
+    total_balance = sum([float(coin['free']) * float(client.ticker_price(coin['asset'] + 'USDT')['price']) for coin in balance['balances'] if coin['asset'] != 'USDT'])
+    target_investment = total_balance * investment_percentage
+
+    for coin in balance['balances']:
+        if coin['asset'] != 'USDT':
+            coin_balance = float(coin['free']) * float(client.ticker_price(coin['asset'] + 'USDT')['price'])
+            if coin_balance > target_investment:
+                # Sell excess
+                order = client.new_order(symbol=coin['asset'] + 'USDT', side='SELL', type='MARKET', quantity=(coin_balance - target_investment) / float(client.ticker_price(coin['asset'] + 'USDT')['price']))
+            elif coin_balance < target_investment:
+                # Buy deficit
+                order = client.new_order(symbol=coin['asset'] + 'USDT', side='BUY', type='MARKET', quantity=(target_investment - coin_balance) / float(client.ticker_price(coin['asset'] + 'USDT')['price']))
+
+def get_top_coins(limit):
+    logging.info(f'Getting top {limit} coins...')
+    exchange_info = client.exchange_info()
+    symbols = [symbol_info['symbol'] for symbol_info in exchange_info['symbols'] if symbol_info['quoteAsset'] == 'USDT']
+    tickers = [client.ticker_24hr(symbol) for symbol in symbols]
+    coins = sorted(tickers, key=lambda x: float(x['quoteVolume']), reverse=True)
+    return [coin['symbol'] for coin in coins[:limit]]
+
+def calculate_success_rate(buy_score, sell_score):
+    total_score = buy_score + sell_score
+    return buy_score / total_score if total_score else 0
+
+def calculate_supertrend(high_prices, low_prices, close_prices, period, multiplier):
+    atr = talib.ATR(high_prices, low_prices, close_prices, timeperiod=period)
+    hl2 = (high_prices + low_prices) / 2
+    upper_band = hl2 + (multiplier * atr)
+    lower_band = hl2 - (multiplier * atr)
+    supertrend = np.zeros(len(close_prices))
+
+    for i in range(period, len(close_prices)):
+        if close_prices[i] <= upper_band[i]:
+            supertrend[i] = upper_band[i]
+        else:
+            supertrend[i] = supertrend[i - 1]
+
+        if close_prices[i] >= lower_band[i]:
+            supertrend[i] = lower_band[i]
+        else:
+            if supertrend[i] > lower_band[i]:
+                supertrend[i] = lower_band[i]
+            else:
+                supertrend[i] = supertrend[i - 1]
+
+    return supertrend
+
+def calculate_fibonacci_retracement_levels(high, low):
+    diff = high - low
+    level1 = high - 0.236 * diff
+    level2 = high - 0.382 * diff
+    level3 = high - 0.618 * diff
+    return [level1, level2, level3]
+
+def calculate_pivot_points(high, low, close):
+    pivot = (high + low + close) / 3
+    r1 = (2 * pivot) - low
+    s1 = (2 * pivot) - high
+    r2 = pivot + (high - low)
+    s2 = pivot - (high - low)
+    return pivot, r1, s1, r2, s2
+
+def round_step_size(quantity, step_size):
+    precision = int(round(-math.log(step_size, 10), 0))
+    return round(quantity, precision)
+
+def place_order(symbol, side, spending_limit, close_price):
+    # Get the precision for this coin
+    symbol_info = [s for s in client.exchange_info()['symbols'] if s['symbol'] == symbol][0]
+    lot_size_info = [f for f in symbol_info['filters'] if f['filterType'] == 'LOT_SIZE'][0]
+
+    min_qty = float(lot_size_info['minQty'])
+    max_qty = float(lot_size_info['maxQty'])
+    step_size = float(lot_size_info['stepSize'])
+
+    # Calculate the quantity
+    quantity = spending_limit / close_price
+    # Adjust the quantity to meet the LOT_SIZE filter requirements
+    quantity = max(min_qty, min(max_qty, quantity))
+    quantity = round_step_size(quantity, step_size)
+
+
+    # Adjust the quantity to meet the precision requirements
+    precision = int(-np.log10(step_size))
+    quantity = round(quantity, precision)
+
+    # Ensure the quantity is within the minQty and maxQty limits
+    quantity = max(min_qty, min(max_qty, quantity))
+
+    # Get the minimum notional value for the trading pair
+    min_notional = get_min_notional(symbol)
+
+    # Ensure the quantity meets the minimum notional value
+    if quantity * close_price < min_notional:
+        quantity = min_notional / close_price
+
+    # Round the price to the correct precision
+    close_price = round(close_price, precision)
+
+    # Place a buy order
+    order = client.new_order(symbol=symbol, side=side, type='MARKET', quantity=quantity)
+    # Set stop loss and take profit levels
+    stop_loss = close_price * 0.9
+    take_profit = close_price * 1.1
+    # Place a stop loss order
+    stop_loss_order = client.new_order(symbol=symbol, side='SELL', type='STOP_LOSS_LIMIT', quantity=spending_limit / close_price, price=stop_loss, stopPrice=stop_loss)
+    # Place a take profit order
+    take_profit_order = client.new_order(symbol=symbol, side='SELL', type='LIMIT', quantity=spending_limit / close_price, price=take_profit)
+
+    logging.info(f'Placed {side} order for {symbol}')
+
+trade_bot()

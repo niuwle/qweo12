@@ -32,11 +32,11 @@ def trade_bot(sleep_time=60):
             balances = {balance['asset']: float(balance['free']) for balance in client.client.account()['balances']}
 
             # Process each coin
-            for symbol in top_coins:
+            for coin in top_coins:
                 try:
-                    trading.process_coin(symbol, ticker_prices, balances)
+                    trading.process_coin(coin['symbol'], ticker_prices, balances)
                 except Exception as e:
-                    logging.error(f'Error processing coin {symbol}: {e}, Ticker Prices: {ticker_prices}, Balances: {balances}')
+                    logging.error(f'Error processing coin {coin}: {str(e)}, Ticker Prices: {ticker_prices}, Balances: {balances}')
 
             # Sleep for a while to prevent the loop from running too frequently
             time.sleep(sleep_time)
