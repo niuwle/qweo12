@@ -3,7 +3,9 @@ import client
 import logging
 import utils
 import talib
+import config
 from sklearn.model_selection import train_test_split
+
 
 def process_coin(symbol, ticker_prices, balances):
     logging.info(f'Processing coin: {symbol}')
@@ -113,7 +115,6 @@ def get_top_coins(limit):
     tickers = [client.client.ticker_24hr(symbol) for symbol in symbols]
     coins = sorted(tickers, key=lambda x: float(x['quoteVolume']), reverse=True)
     return coins[:limit]  # Return the top 'limit' coins
-
 
 def place_order(symbol, side, spending_limit, close_price):
     # Get the precision for this coin

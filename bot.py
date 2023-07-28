@@ -1,9 +1,11 @@
 #bot.py#
-import logging
 import time
 import client
 import utils
 import trading
+import logging
+
+logging.basicConfig(filename='bot.log', level=logging.INFO, format='%(asctime)s %(message)s')
 
 def trade_bot(sleep_time=60):
     # Call the function to print the balances
