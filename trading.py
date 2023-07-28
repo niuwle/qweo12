@@ -84,13 +84,15 @@ def process_coin(symbol, ticker_prices, balances):
         spending_limit = float(usdt_balance['free']) * config.investment_percentage  # Update the spending limit based on the current balance
         logging.info(f'Current balance: {usdt_balance["free"]}')
 
-    if success_rate > 0.6 and usdt_balance is not None and float(usdt_balance['free']) > spending_limit:
-        place_order(symbol, 'BUY', spending_limit, close_prices[-1])
+    if success_rate is not None and usdt_balance is not None and usdt_balance['free'] is not None and spending_limit is not None:
+        if success_rate > 0.6 and float(usdt_balance['free']) > spending_limit:
+            place_order(symbol, 'BUY', spending_limit, close_prices[-1])
 
-    elif success_rate < 0.4:
+    if success_rate is not None and success_rate < 0.4:
         coin_balance = next((coin for coin in balance['balances'] if coin['asset'] == symbol.split('/')[0]), None)
-        if coin_balance is not None and float(coin_balance['free']) * close_prices[-1] > spending_limit:
-            place_order(symbol, 'SELL', float(coin_balance['free']) * close_prices[-1], close_prices[-1])
+        if coin_balance is not None and coin_balance['free'] is not None and close_prices[-1] is not None and spending_limit is not None:
+            if float(coin_balance['free']) * close_prices[-1] > spending_limit:
+                place_order(symbol, 'SELL', float(coin_balance['free']) * close_prices[-1], close_prices[-1])
 
 
 def rebalance_portfolio():
@@ -113,7 +115,28 @@ def get_top_coins(limit):
     exchange_info = client.client.exchange_info()
     symbols = [symbol_info['symbol'] for symbol_info in exchange_info['symbols'] if symbol_info['quoteAsset'] == 'USDT']
     tickers = [client.client.ticker_24hr(symbol) for symbol in symbols]
-    coins = sorted(tickers, key=lambda x: float(x['quoteVolume']), reverse=True)
+    
+    # Filter out stablecoins
+    stablecoins = ['USDT', 'USDC', 'BUSD', 'DAI', 'TUSD', 'PAX', 'GUSD']
+    tickers = [ticker for ticker in tickers if not any(stablecoin in ticker['symbol'].replace('USDT', '') for stablecoin in stablecoins)]
+    
+    logging.info(f'Number of coins after filtering out stablecoins: {len(tickers)}')
+    
+    # Filter out coins with low volatility
+    tickers = [ticker for ticker in tickers if float(ticker['highPrice']) - float(ticker['lowPrice']) > float(ticker['lastPrice']) * 0.01]  # Change 0.01 to your desired volatility threshold
+    
+    logging.info(f'Number of coins after filtering out low volatility coins: {len(tickers)}')
+    
+    # Sort coins by a combination of volume and price change
+    coins = sorted(tickers, key=lambda x: float(x['quoteVolume']) * abs(float(x['priceChangePercent'])), reverse=True)
+    
+    logging.info(f'Number of coins after sorting: {len(coins)}')
+    
+    # Filter coins based on recent price changes
+    coins = [coin for coin in coins if float(coin['priceChangePercent']) > 0]  # Change 0 to your desired price change threshold
+    
+    logging.info(f'Number of coins after filtering based on recent price changes: {len(coins)}')
+    
     return coins[:limit]  # Return the top 'limit' coins
 
 def place_order(symbol, side, spending_limit, close_price):
