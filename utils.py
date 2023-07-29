@@ -1,11 +1,11 @@
-import client
+from client import binance_client
 import logging
 import numpy as np
 import talib
 import math
 
 def get_min_notional(symbol):
-    exchange_info = client.client.exchange_info()
+    exchange_info = binance_client.exchange_info()
     for s in exchange_info['symbols']:
         if s['symbol'] == symbol:
             for f in s['filters']:
@@ -15,7 +15,7 @@ def get_min_notional(symbol):
 
 def print_wallet_balances():
     # Get account information
-    account_info = client.client.account()
+    account_info = binance_client.account()
 
     # Get balances
     balances = account_info['balances']
